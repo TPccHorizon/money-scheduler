@@ -6,9 +6,9 @@ package money.scheduler;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-class LibraryTest {
+class MoneySchedulerTest {
     @Test void testSomeLibraryMethod() {
-        Library classUnderTest = new Library();
+        MoneyScheduler classUnderTest = new MoneyScheduler();
         assertTrue(classUnderTest.someLibraryMethod(), "someLibraryMethod should return 'true'");
     }
 }
