@@ -12,7 +12,7 @@ class MonthPaymentCalculator {
          * @param paymentInterval : The interval (in months) every which a payment takes place.
          * @param start : The year and month where the payment starts.
          */
-        fun calculateMonthsOfPayment(monthOfLastPayment: Int, paymentInterval: Int, start: YearMonth): List<Int?> {
+        fun calculateMonthsOfPayment(monthOfLastPayment: Int, paymentInterval: Int, start: YearMonth): List<Int> {
             val paymentMonths: MutableList<Int> = mutableListOf()
             paymentMonths.add(monthOfLastPayment)
             var currentMonth = monthOfLastPayment

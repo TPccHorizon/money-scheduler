@@ -12,6 +12,3 @@ const val SEPTEMBER: Int = 9
 const val OCTOBER: Int = 10
 const val NOVEMBER: Int = 11
 const val DECEMBER: Int = 12
-
-class CalendarMonth {
-}

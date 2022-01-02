@@ -12,15 +12,15 @@ const val MAX_MONTH = DECEMBER
 class Scheduler : MoneyScheduler {
 
 
-    override fun calculateCurrentYearSchedule(startingMonth: Int, startingYear: Int, paymentInterval: Int): List<Int?> {
+    override fun calculateCurrentYearSchedule(startingMonth: Int, startingYear: Int, paymentInterval: Int): List<Int> {
         return calculateCurrentYearSchedule(YearMonth.of(startingYear, startingMonth), paymentInterval)
     }
 
-    override fun calculateCurrentYearSchedule(startDate: LocalDate, paymentInterval: Int): List<Int?> {
+    override fun calculateCurrentYearSchedule(startDate: LocalDate, paymentInterval: Int): List<Int> {
         return calculateCurrentYearSchedule(YearMonth.of(startDate.year, startDate.month), paymentInterval)
     }
 
-    fun calculateCurrentYearSchedule(start: YearMonth, paymentInterval: Int): List<Int?> {
+    override fun calculateCurrentYearSchedule(start: YearMonth, paymentInterval: Int): List<Int> {
         validateInput(start, paymentInterval)
         if (paymentInterval == 1) {
             // This means the schedule is the same for every year

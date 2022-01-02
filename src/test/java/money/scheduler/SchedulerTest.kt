@@ -1,6 +1,9 @@
 package money.scheduler
 
+import money.scheduler.calculators.MonthPaymentCalculator
 import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtensionContext
 import org.junit.jupiter.params.ParameterizedTest
@@ -10,6 +13,7 @@ import org.junit.jupiter.params.provider.ArgumentsSource
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mockStatic
 import java.time.LocalDate
+import java.time.YearMonth
 import java.util.stream.Stream
 
 internal class SchedulerTest {
@@ -30,7 +34,7 @@ internal class SchedulerTest {
 
     @ParameterizedTest
     @ArgumentsSource(MonthsArgumentsProvider::class)
-    fun testSchedule(startingMonth: Int, startingYear: Int, currentYear: Int, paymentInterval: Int, expected: List<Int?>?) {
+    fun testSchedule(startingMonth: Int, startingYear: Int, currentYear: Int, paymentInterval: Int, expected: List<Int>) {
         // given
         val currentDate = LocalDate.of(currentYear, 1 , 1)
         val mocked = mockStatic(LocalDate::class.java)
@@ -53,10 +57,10 @@ internal class SchedulerTest {
         val mocked = mockStatic(LocalDate::class.java)
         `when`(LocalDate.now()).thenReturn(currentDate)
         // when
-        Assertions.assertThrows(IllegalArgumentException::class.java) {
+        assertThrows(IllegalArgumentException::class.java) {
             scheduler.calculateCurrentYearSchedule(1, yearInFuture, 1)
         }
-        Assertions.assertThrows(IllegalArgumentException::class.java) {
+        assertThrows(IllegalArgumentException::class.java) {
             scheduler.calculateCurrentYearSchedule(1, yearInPast, 1)
         }
         mocked.close()
@@ -69,11 +73,34 @@ internal class SchedulerTest {
         val intervalTooLow = 0
 
         // when // then
-        Assertions.assertThrows(IllegalArgumentException::class.java) {
+        assertThrows(IllegalArgumentException::class.java) {
             scheduler.calculateCurrentYearSchedule(1, 2020, intervalTooHigh)
         }
-        Assertions.assertThrows(IllegalArgumentException::class.java) {
+        assertThrows(IllegalArgumentException::class.java) {
             scheduler.calculateCurrentYearSchedule(1, 2020, intervalTooLow)
         }
+    }
+
+    @Test
+    fun `test method overload`() {
+        // given
+        val startYear = 2021
+        val startMonth = 1
+        val interval = 2
+
+        val startDate = LocalDate.of(startYear, startMonth, 1)
+
+        // when
+        val results = mutableListOf<List<Int>>()
+        results.add(scheduler.calculateCurrentYearSchedule(startDate, interval))
+        results.add(scheduler.calculateCurrentYearSchedule(startMonth, startYear, interval))
+        results.add(scheduler.calculateCurrentYearSchedule(YearMonth.of(startYear, startMonth), interval))
+
+        // then
+        val expected = listOf(1, 3, 5, 7, 9, 11)
+        results.forEach {
+            assertEquals(expected, it)
+        }
+
     }
 }
