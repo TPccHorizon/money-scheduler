@@ -1,6 +1,6 @@
 package money.scheduler.model
 
-import java.util.*
+import java.util.LinkedList
 
 class PaymentYear(val year: Int, val months: List<Month>) {
 
